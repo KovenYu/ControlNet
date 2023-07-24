@@ -3,6 +3,9 @@
 training/
 lightning_logs/
 image_log/
+tmp/
+scripts/
+logs/
 
 *.pth
 *.pt
@@ -141,3 +144,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+scripts/exp230724_train_nature_inpaint/debug.sh
