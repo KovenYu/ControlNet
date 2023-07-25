@@ -6,11 +6,12 @@ from torch.utils.data import Dataset
 
 
 class MyDataset(Dataset):
-    def __init__(self):
+    def __init__(self, json_path='./training/fill50k/prompt.json'):
         self.data = []
-        with open('./training/fill50k/prompt.json', 'rt') as f:
+        with open(json_path, 'rt') as f:
             for line in f:
                 self.data.append(json.loads(line))
+        self.json_path = json_path
 
     def __len__(self):
         return len(self.data)
@@ -21,9 +22,12 @@ class MyDataset(Dataset):
         source_filename = item['source']
         target_filename = item['target']
         prompt = item['prompt']
+        if self.json_path == './training/fill50k/prompt.json': 
+            source_filename = './training/fill50k/' + source_filename
+            target_filename = './training/fill50k/' + target_filename
 
-        source = cv2.imread('./training/fill50k/' + source_filename)
-        target = cv2.imread('./training/fill50k/' + target_filename)
+        source = cv2.imread(source_filename)
+        target = cv2.imread(target_filename)
 
         # Do not forget that OpenCV read images in BGR order.
         source = cv2.cvtColor(source, cv2.COLOR_BGR2RGB)

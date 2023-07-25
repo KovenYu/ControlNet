@@ -17,7 +17,7 @@ def __main__(args):
     model.only_mid_control = args.only_mid_control
 
     # Misc
-    dataset = MyDataset()
+    dataset = MyDataset(json_path=args.dataset_json_path)
     dataloader = DataLoader(dataset, num_workers=args.num_workers, batch_size=args.batch_size, shuffle=True)
     logger = ImageLogger(batch_frequency=args.logger_freq)
     trainer = pl.Trainer(gpus=args.gpus, precision=32, callbacks=[logger], default_root_dir=args.default_root_dir,
@@ -40,5 +40,6 @@ if __name__ == '__main__':
     parser.add_argument('--default_root_dir', type=str, default='./logs')
     parser.add_argument('--gpus', type=int, default=1)
     parser.add_argument('--strategy', type=str, default='ddp')
+    parser.add_argument('--dataset_json_path', type=str, default='./training/fill50k/prompt.json')
     args = parser.parse_args()
     __main__(args)
