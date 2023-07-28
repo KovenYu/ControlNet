@@ -20,13 +20,12 @@ class MyDataset(Dataset):
         item = self.data[idx]
 
         source_filename = item['source']
+        mask_filename = item['mask']
         target_filename = item['target']
         prompt = item['prompt']
-        if self.json_path == './training/fill50k/prompt.json': 
-            source_filename = './training/fill50k/' + source_filename
-            target_filename = './training/fill50k/' + target_filename
 
         source = cv2.imread(source_filename)
+        mask = cv2.imread(mask_filename)[..., 0:1]
         target = cv2.imread(target_filename)
 
         # Do not forget that OpenCV read images in BGR order.
@@ -35,6 +34,8 @@ class MyDataset(Dataset):
 
         # Normalize source images to [0, 1].
         source = source.astype(np.float32) / 255.0
+        mask = mask.astype(np.float32) / 255.0
+        source = np.concatenate([source, mask], axis=-1)
 
         # Normalize target images to [-1, 1].
         target = (target.astype(np.float32) / 127.5) - 1.0

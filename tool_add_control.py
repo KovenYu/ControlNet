@@ -1,13 +1,17 @@
 import sys
 import os
+import argparse
 
-assert len(sys.argv) == 3, 'Args are wrong.'
-
-input_path = sys.argv[1]
-output_path = sys.argv[2]
+parser = argparse.ArgumentParser()
+parser.add_argument('--input_path', type=str)
+parser.add_argument('--output_path', type=str)
+parser.add_argument('--model_config_path', type=str, default='./models/cldm_v15.yaml')
+args = parser.parse_args()
+input_path = args.input_path
+output_path = args.output_path
+model_config_path = args.model_config_path
 
 assert os.path.exists(input_path), 'Input model does not exist.'
-assert not os.path.exists(output_path), 'Output filename already exists.'
 assert os.path.exists(os.path.dirname(output_path)), 'Output path is not valid.'
 
 import torch
@@ -24,7 +28,7 @@ def get_node_name(name, parent_name):
     return True, name[len(parent_name):]
 
 
-model = create_model(config_path='./models/cldm_v15.yaml')
+model = create_model(config_path=model_config_path)
 
 pretrained_weights = torch.load(input_path)
 if 'state_dict' in pretrained_weights:
