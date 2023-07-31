@@ -40,7 +40,16 @@ class ImageLogger(Callback):
                 filename = "gs-{:06}_e-{:03}_b-{:06}_{}_mask.png".format(global_step, current_epoch, batch_idx, k)
                 path = os.path.join(root, filename)
                 Image.fromarray(grid[..., -1]).save(path)
-                grid = grid[..., :-1]
+                grid = grid[..., :3]
+            # control can have rgb + mask + disp, which has 5 channels in the last dim
+            if k == 'control' and grid.shape[-1] == 5:
+                filename = "gs-{:06}_e-{:03}_b-{:06}_{}_mask.png".format(global_step, current_epoch, batch_idx, k)
+                path = os.path.join(root, filename)
+                Image.fromarray(grid[..., -2]).save(path)
+                filename = "gs-{:06}_e-{:03}_b-{:06}_{}_disp.png".format(global_step, current_epoch, batch_idx, k)
+                path = os.path.join(root, filename)
+                Image.fromarray(grid[..., -1]).save(path)
+                grid = grid[..., :3]
             filename = "gs-{:06}_e-{:03}_b-{:06}_{}.png".format(global_step, current_epoch, batch_idx, k)
             path = os.path.join(root, filename)
             os.makedirs(os.path.split(path)[0], exist_ok=True)

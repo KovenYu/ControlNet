@@ -6,6 +6,7 @@ image_log/
 tmp/
 scripts/
 logs/
+notebooks/
 
 *.pth
 *.pt
